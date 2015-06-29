@@ -25,11 +25,12 @@
 # parameters
 # $1: package name
 # $2: branch
-# $3: tag for cvs repo.
-# $4: Directory where to put the sources.
-# $5: Component (in data for the list of patch that shouldn't be applied).
-# $6: package. (to find the patch that should be applied).
-# $7: package version. (to find the patch that should be applied).
+#
+# package name:
+# Something like tomcat7 (http://pkgs.devel.redhat.com/cgit/rpms/tomcat7/)
+#
+# branch:
+# Something like jws-3.0-rhel-7 (http://pkgs.devel.redhat.com/cgit/rpms/tomcat7/?h=jws-3.0-rhel-7)
 
 package=$1
 branch=$2
