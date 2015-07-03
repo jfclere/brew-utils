@@ -53,30 +53,34 @@ fi
    exit
  fi
 )
-fname=`cat ${package}/sources | awk '{ print $2 }'`
-# expand the file.
-case $fname in
-  *.tar.bz2)
-    bzip2 -dc ${package}/${fname} | tar -xf -
-    if [ $? -ne 0 ];then
-      echo "extract $fname failed"
+sourceslist=`cat ${package}/sources | awk '{ print $2 }'`
+for fname in ${sourceslist}
+do
+  echo "extracting file: $fname"
+  # expand the file.
+  case $fname in
+    *.tar.bz2)
+      bzip2 -dc ${package}/${fname} | tar -xf -
+      if [ $? -ne 0 ];then
+        echo "extract $fname failed"
+        exit 1
+      fi
+      dirsources=`bzip2  -dc ${package}/${fname} | tar -tf - | head -1 | awk '{ print $1 }'`
+      ;;
+    *.tar.gz)
+      gunzip -c ${package}/${fname} | tar -xf -
+      if [ $? -ne 0 ];then
+        echo "extract $fname failed"
+        exit 1
+      fi
+      dirsources=`gunzip -c ${package}/${fname} | tar -tf - | head -1 | awk '{ print $1 }'`
+      ;;
+    *)
+      echo "$fname can't expanded"
       exit 1
-    fi
-    dirsources=`bzip2  -dc ${package}/${fname} | tar -tf - | head -1 | awk '{ print $1 }'`
-    ;;
-  *.tar.gz)
-    gunzip -c ${package}/${fname} | tar -xf -
-    if [ $? -ne 0 ];then
-      echo "extract $fname failed"
-      exit 1
-    fi
-    dirsources=`gunzip -c ${package}/${fname} | tar -tf - | head -1 | awk '{ print $1 }'`
-    ;;
-  *)
-    echo "$fname can't expanded"
-    exit 1
-    ;;
-esac
+      ;;
+  esac
+done
 
 echo "sources in ${dirsources}"
 
