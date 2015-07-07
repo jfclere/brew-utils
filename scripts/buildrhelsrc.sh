@@ -81,6 +81,7 @@ do
       ;;
   esac
 done
+cp ${package}/* $dirsources
 
 echo "sources in ${dirsources}"
 
