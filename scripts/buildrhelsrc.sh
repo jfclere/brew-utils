@@ -92,7 +92,7 @@ WHERE=$$.tempdir
 packagedir=`(cd $package; pwd)`
 mkdir -p ${WHERE}
 grep "^%patch" ${package}/${package}.spec | sed 's:%:@:' | sed 's: :@ :' | awk ' { print $1 " " $2 } ' > ${WHERE}/patch.cmd
-grep "^Patch" ${package}/${package}.spec | sed 's:^Patch:@patch:' | sed 's/:/@/' |  awk ' { print "s:" $1 ": @PATCH@ -i @DIR@" $2 ":" } ' > ${WHERE}/patch.files
+grep "^Patch" ${package}/${package}.spec | sed 's:^Patch:@patch:' | sed 's/:/@/' |  awk ' { print "s:" $1 ": @PATCH@ --fuzz=0 -i @DIR@" $2 ":" } ' > ${WHERE}/patch.files
 sed -f ${WHERE}/patch.files ${WHERE}/patch.cmd | sed "s:@DIR@:${packagedir}/:" | sed "s:@PATCH@:${patch}:" > ${WHERE}/patch.sh
 
 echo "Applying the rhel patches to ${dirsources}"
