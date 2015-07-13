@@ -75,6 +75,14 @@ do
       fi
       dirsources=`gunzip -c ${package}/${fname} | tar -tf - | head -1 | awk '{ print $1 }'`
       ;;
+    *.tar.xz)
+      tar -xf ${package}/${fname}
+      if [ $? -ne 0 ];then
+        echo "extract $fname failed"
+        exit 1
+      fi
+      dirsources=`tar -tf ${package}/${fname} | head -1 | awk '{ print $1 }'`
+      ;;
     *)
       echo "$fname can't expanded"
       exit 1
